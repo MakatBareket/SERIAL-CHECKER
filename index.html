@@ -61,25 +61,25 @@
             };
             
             var productionYear = yearMap[yearCode] || "לא ידוע";
-            var productionMonth = monthMap[monthCode] || "לא ידוע";
+            var productionMonth = Object.keys(monthMap).find(key => monthMap[key] === monthCode) || "לא ידוע";
             var currentYear = new Date().getFullYear();
             var currentMonth = new Date().getMonth() + 1;
             
             var warrantyStatus;
-            if (productionYear > currentYear - 1) {
-                if (productionYear >= 2024 && serial.includes("XC")) {
-                    warrantyStatus = "באחריות סמסונג";
-                } else {
-                    warrantyStatus = "באחריות סמליין";
-                }
-            } else {
+            if (productionYear < 2024 || (productionYear === 2024 && monthCode < '3')) {
                 warrantyStatus = "לא באחריות";
+            } else if (productionYear === 2024 && monthCode >= '3' && monthCode < 'C') {
+                warrantyStatus = "באחריות סמליין";
+            } else if (productionYear > 2024 || (productionYear === 2024 && monthCode === 'C' && serial.includes("XC"))) {
+                warrantyStatus = "באחריות סמסונג";
+            } else {
+                warrantyStatus = "לא ידוע";
             }
             
             var dvbSupport = (productionYear >= 2018) ? "תומך DVB-T2" : "תומך DVB-T1";
             
             resultDiv.innerHTML = `<strong>שנת ייצור:</strong> ${productionYear}<br>
-                                   <strong>חודש ייצור:</strong> ${productionMonth}<br>
+                                   <strong>חודש ייצור:</strong> ${monthMap[monthCode]}<br>
                                    <strong>סטטוס אחריות:</strong> ${warrantyStatus}<br>
                                    <strong>תמיכת שידור:</strong> ${dvbSupport}`;
             resultDiv.style.display = "block";
