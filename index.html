@@ -67,7 +67,7 @@
             var warrantyStatus;
             if (productionYear >= 2024 && serial.includes("XC")) {
                 warrantyStatus = "באחריות סמסונג";
-            } else if (productionYear >= currentYear - 1) {
+            } else if (productionYear >= currentYear - 1 && productionYear < 2024) {
                 warrantyStatus = "באחריות סמליין";
             } else {
                 warrantyStatus = "לא באחריות";
