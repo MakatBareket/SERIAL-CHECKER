@@ -63,12 +63,15 @@
             var productionYear = yearMap[yearCode] || "לא ידוע";
             var productionMonth = monthMap[monthCode] || "לא ידוע";
             var currentYear = new Date().getFullYear();
+            var currentMonth = new Date().getMonth() + 1;
             
             var warrantyStatus;
-            if (productionYear >= 2024 && serial.includes("XC")) {
-                warrantyStatus = "באחריות סמסונג";
-            } else if (productionYear >= currentYear - 1 && productionYear < 2024) {
-                warrantyStatus = "באחריות סמליין";
+            if (productionYear > currentYear - 1) {
+                if (productionYear >= 2024 && serial.includes("XC")) {
+                    warrantyStatus = "באחריות סמסונג";
+                } else {
+                    warrantyStatus = "באחריות סמליין";
+                }
             } else {
                 warrantyStatus = "לא באחריות";
             }
