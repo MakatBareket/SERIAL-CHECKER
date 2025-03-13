@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>חיפוש מספר סיריאלי</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>בדיקת מוצר לפי מספר סיריאלי</h2>
+    <input type="text" id="serialInput" placeholder="הכנס מספר סיריאלי">
+    <button onclick="lookupSerial()">חפש</button>
+    <div id="result"></div>
+
+    <script>
+        function lookupSerial() {
+            var serial = document.getElementById("serialInput").value.trim();
+            var resultDiv = document.getElementById("result");
+            
+            if (serial.length !== 11 && serial.length !== 15) {
+                resultDiv.innerHTML = "מספר סיריאלי שגוי, אנא בדוק והזן שוב.";
+                resultDiv.style.display = "block";
+                return;
+            }
+            
+            var yearCode, monthCode;
+            if (serial.length === 15) {
+                yearCode = serial[7];
+                monthCode = serial[8];
+            } else if (serial.length === 11) {
+                yearCode = serial[3];
+                monthCode = serial[4];
+            }
+            
+            var yearMap = {
+                'F': 2014, 'G': 2015, 'H': 2016, 'J': 2017,
+                'K': 2018, 'M': 2019, 'N': 2020, 'R': 2021,
+                'T': 2022, 'W': 2023, 'X': 2024, 'Y': 2025
+            };
+            
+            var monthMap = {
+                '1': 'ינואר', '2': 'פברואר', '3': 'מרץ', '4': 'אפריל', '5': 'מאי',
+                '6': 'יוני', '7': 'יולי', '8': 'אוגוסט', 'A': 'אוקטובר', 'B': 'נובמבר', 'C': 'דצמבר'
+            };
+            
+            var productionYear = yearMap[yearCode] || "לא ידוע";
+            var productionMonth = monthMap[monthCode] || "לא ידוע";
+            var warrantyStatus = (productionYear >= 2024 && serial.includes("XC")) ? "באחריות סמסונג" : "לא באחריות";
+            
+            if (warrantyStatus === "לא באחריות" && productionYear < 2024) {
+                warrantyStatus = "באחריות סמליין";
+            }
+            
+            var dvbSupport = (productionYear >= 2018) ? "תומך DVB-T2" : "תומך DVB-T1";
+            
+            resultDiv.innerHTML = `<strong>שנת ייצור:</strong> ${productionYear}<br>
+                                   <strong>חודש ייצור:</strong> ${productionMonth}<br>
+                                   <strong>סטטוס אחריות:</strong> ${warrantyStatus}<br>
+                                   <strong>תמיכת שידור:</strong> ${dvbSupport}`;
+            resultDiv.style.display = "block";
+        }
+    </script>
+</body>
+</html>
