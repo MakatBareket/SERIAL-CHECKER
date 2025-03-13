@@ -3,31 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>חיפוש מספר סיריאלי</title>
+    <title>בדיקת מספר סיריאלי</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
+            background-color: #f4f4f4;
             padding: 20px;
         }
-        input, button {
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+        h2 {
+            color: #333;
+        }
+        input {
+            width: 100%;
             padding: 10px;
-            margin: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
             font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
         }
         #result {
             margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 5px;
+            background: #e9ecef;
             display: none;
+            text-align: left;
         }
     </style>
 </head>
 <body>
-    <h2>בדיקת מוצר לפי מספר סיריאלי</h2>
-    <input type="text" id="serialInput" placeholder="הכנס מספר סיריאלי">
-    <button onclick="lookupSerial()">חפש</button>
-    <div id="result"></div>
+    <div class="container">
+        <h2>בדיקת מוצר לפי מספר סיריאלי</h2>
+        <input type="text" id="serialInput" placeholder="הכנס מספר סיריאלי">
+        <button onclick="lookupSerial()">חפש</button>
+        <div id="result"></div>
+    </div>
 
     <script>
         function lookupSerial() {
@@ -35,7 +68,7 @@
             var resultDiv = document.getElementById("result");
             
             if (serial.length !== 11 && serial.length !== 15) {
-                resultDiv.innerHTML = "מספר סיריאלי שגוי, אנא בדוק והזן שוב.";
+                resultDiv.innerHTML = "❌ מספר סיריאלי שגוי, אנא בדוק והזן שוב.";
                 resultDiv.style.display = "block";
                 return;
             }
@@ -65,21 +98,21 @@
             
             var warrantyStatus;
             if (productionYear < 2024 || (productionYear === 2024 && monthCode < '3')) {
-                warrantyStatus = "לא באחריות";
+                warrantyStatus = "❌ לא באחריות";
             } else if (productionYear === 2024 && monthCode >= '3' && monthCode <= 'B') {
-                warrantyStatus = "באחריות סמליין";
+                warrantyStatus = "✔️ באחריות סמליין";
             } else if (productionYear > 2024 || (productionYear === 2024 && monthCode === 'C' && serial.includes("XC"))) {
-                warrantyStatus = "באחריות סמסונג";
+                warrantyStatus = "✔️ באחריות סמסונג";
             } else {
-                warrantyStatus = "לא ידוע";
+                warrantyStatus = "❓ לא ידוע";
             }
             
-            var dvbSupport = (productionYear >= 2018) ? "תומך DVB-T2" : "תומך DVB-T1";
+            var dvbSupport = (productionYear >= 2018) ? "📺 תומך DVB-T2" : "📺 תומך DVB-T1";
             
-            resultDiv.innerHTML = `<strong>שנת ייצור:</strong> ${productionYear}<br>
-                                   <strong>חודש ייצור:</strong> ${productionMonth}<br>
-                                   <strong>סטטוס אחריות:</strong> ${warrantyStatus}<br>
-                                   <strong>תמיכת שידור:</strong> ${dvbSupport}`;
+            resultDiv.innerHTML = `<strong>📅 שנת ייצור:</strong> ${productionYear}<br>
+                                   <strong>📆 חודש ייצור:</strong> ${productionMonth}<br>
+                                   <strong>🔧 סטטוס אחריות:</strong> ${warrantyStatus}<br>
+                                   <strong>📡 תמיכת שידור:</strong> ${dvbSupport}`;
             resultDiv.style.display = "block";
         }
     </script>
